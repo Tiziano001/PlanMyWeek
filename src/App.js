@@ -1,5 +1,5 @@
 import './App.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const giorniSettimana = [
   'Lunedì',
@@ -13,6 +13,20 @@ const giorniSettimana = [
 
 function App() {
   const [attività, setAttività] = useState({});
+  const [listaAttività, setListaAttività] = useState({});
+
+  // Carica le attività da LocalStorage al primo caricamento
+  useEffect(() => {
+    const datiSalvati = localStorage.getItem('listaAttività');
+    if (datiSalvati) {
+      setListaAttività(JSON.parse(datiSalvati));
+    }
+  }, []);
+
+  // Salva ogni volta che listaAttività cambia
+  useEffect(() => {
+    localStorage.setItem('listaAttività', JSON.stringify(listaAttività));
+  }, [listaAttività]);
 
   const handleChange = (giorno, testo) => {
     setAttività((prev) => ({
@@ -22,7 +36,14 @@ function App() {
   };
 
   const handleAdd = (giorno) => {
-    alert(`Hai aggiunto: "${attività[giorno]}" al giorno ${giorno}`);
+    const testo = attività[giorno]?.trim();
+    if (!testo) return;
+
+    setListaAttività((prev) => ({
+      ...prev,
+      [giorno]: [...(prev[giorno] || []), testo],
+    }));
+
     setAttività((prev) => ({
       ...prev,
       [giorno]: '',
@@ -43,6 +64,11 @@ function App() {
               onChange={(e) => handleChange(giorno, e.target.value)}
             />
             <button onClick={() => handleAdd(giorno)}>Aggiungi +</button>
+            <ul>
+              {(listaAttività[giorno] || []).map((item, index) => (
+                <li key={index}>{item}</li>
+              ))}
+            </ul>
           </div>
         ))}
       </div>

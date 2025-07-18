@@ -1,3 +1,4 @@
+/* Stile generale della pagina */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -5,6 +6,7 @@ body {
   background-color: #f2f2f2;
 }
 
+/* Contenitore principale */
 .app-container {
   max-width: 800px;
   margin: auto;
@@ -14,16 +16,19 @@ body {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+/* Titolo */
 h1 {
   text-align: center;
   color: #333;
 }
 
+/* Testo introduttivo o descrizione */
 p {
   text-align: center;
   color: #555;
 }
 
+/* Contenitore dei giorni */
 .giorni-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -31,17 +36,20 @@ p {
   margin-top: 2rem;
 }
 
+/* Singolo giorno */
 .giorno {
   background-color: #e6f0ff;
   padding: 1rem;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   text-align: center;
+    max-height: 300px;
+  overflow-y: auto;
 }
 
-
+/* Input attività */
 .giorno input {
-  width: 100%;
+  width: 95%;
   padding: 0.5rem;
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
@@ -49,6 +57,7 @@ p {
   border-radius: 5px;
 }
 
+/* Bottone Aggiungi */
 .giorno button {
   padding: 0.5rem 1rem;
   background-color: #4a90e2;
@@ -61,3 +70,20 @@ p {
 .giorno button:hover {
   background-color: #357ac8;
 }
+
+/* Lista attività */
+.giorno ul {
+  list-style-type: disc;
+  padding-left: 1rem;
+  text-align: left;
+}
+
+.giorno li {
+  margin: 0.3rem 0;
+  font-size: 0.95rem;
+  color: #333;
+  word-wrap: break-word;      /*per stringhe troppo lunghe tipo aaaaaaaaaaaaaaaaaaaaaaaaaa*/
+  overflow-wrap: break-word;  
+  white-space: normal;        /* va a capo automaticamente*/
+}
+
