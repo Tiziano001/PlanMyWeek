@@ -15,7 +15,6 @@ function App() {
   const [attività, setAttività] = useState({});
   const [listaAttività, setListaAttività] = useState({});
 
-  // Carica le attività da LocalStorage al primo caricamento
   useEffect(() => {
     const datiSalvati = localStorage.getItem('listaAttività');
     if (datiSalvati) {
@@ -23,7 +22,6 @@ function App() {
     }
   }, []);
 
-  // Salva ogni volta che listaAttività cambia
   useEffect(() => {
     localStorage.setItem('listaAttività', JSON.stringify(listaAttività));
   }, [listaAttività]);
@@ -39,9 +37,11 @@ function App() {
     const testo = attività[giorno]?.trim();
     if (!testo) return;
 
+    const nuovaAttività = { testo, completata: false };
+
     setListaAttività((prev) => ({
       ...prev,
-      [giorno]: [...(prev[giorno] || []), testo],
+      [giorno]: [...(prev[giorno] || []), nuovaAttività],
     }));
 
     setAttività((prev) => ({
@@ -50,9 +50,37 @@ function App() {
     }));
   };
 
+  const toggleCompletata = (giorno, index) => {
+    const nuove = [...listaAttività[giorno]];
+    nuove[index].completata = !nuove[index].completata;
+    setListaAttività((prev) => ({
+      ...prev,
+      [giorno]: nuove,
+    }));
+  };
+
+  const eliminaAttività = (giorno, index) => {
+    const nuove = [...listaAttività[giorno]];
+    nuove.splice(index, 1);
+    setListaAttività((prev) => ({
+      ...prev,
+      [giorno]: nuove,
+    }));
+  };
+
+  const svuotaTutto = () => {
+    if (window.confirm("Sei sicuro di voler cancellare tutte le attività?")) {
+      setListaAttività({});
+      localStorage.removeItem('listaAttività');
+    }
+  };
+
   return (
     <div className="app-container">
       <h1>Plan My Week</h1>
+      <button className="svuota-btn" onClick={svuotaTutto}>
+        Svuota tutte le attività
+      </button>
       <div className="giorni-container">
         {giorniSettimana.map((giorno) => (
           <div className="giorno" key={giorno}>
@@ -66,7 +94,29 @@ function App() {
             <button onClick={() => handleAdd(giorno)}>Aggiungi +</button>
             <ul>
               {(listaAttività[giorno] || []).map((item, index) => (
-                <li key={index}>{item}</li>
+                <li key={index}>
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={item.completata}
+                      onChange={() => toggleCompletata(giorno, index)}
+                    />
+                    <span
+                      style={{
+                        textDecoration: item.completata ? 'line-through' : 'none',
+                        marginLeft: '0.5rem',
+                      }}
+                    >
+                      {item.testo}
+                    </span>
+                  </label>
+                  <button
+                    onClick={() => eliminaAttività(giorno, index)}
+                    style={{ marginLeft: '0.5rem' }}
+                  >
+                    ❌
+                  </button>
+                </li>
               ))}
             </ul>
           </div>
