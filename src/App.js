@@ -78,6 +78,10 @@ function App() {
   return (
     <div className="app-container">
       <h1>Plan My Week</h1>
+      <p className="legenda">
+        <span>✅ = attività completata</span> &nbsp; | &nbsp;
+        <span>❌ = elimina attività</span>
+      </p>
       <button className="svuota-btn" onClick={svuotaTutto}>
         Svuota tutte le attività
       </button>
@@ -91,7 +95,7 @@ function App() {
               value={attività[giorno] || ''}
               onChange={(e) => handleChange(giorno, e.target.value)}
             />
-            <button onClick={() => handleAdd(giorno)}>Aggiungi +</button>
+            <button onClick={() => handleAdd(giorno)}>Aggiungi</button>
             <ul>
               {(listaAttività[giorno] || []).map((item, index) => (
                 <li key={index}>
